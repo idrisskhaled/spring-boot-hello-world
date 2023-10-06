@@ -1,0 +1,32 @@
+version: '1'
+services:
+  # Spring Boot Application
+  spring-app:
+    image: hello-world:latest
+    container_name: hello-world
+    ports:
+      - "8080:8080"  # Map the Spring Boot app's port to the host machine
+    depends_on:
+      - mongo-db  # Ensure the Spring Boot app starts after the MongoDB service
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongo-db:27017/your-database-name
+    networks:
+      - my-network
+
+  # MongoDB
+  mongo-db:
+    image: mongo:latest
+    container_name: mongo-db
+    ports:
+      - "27017:27017"  # Map the MongoDB port to the host machine
+    volumes:
+      - mongo-data:/data/db  # Persist MongoDB data
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
