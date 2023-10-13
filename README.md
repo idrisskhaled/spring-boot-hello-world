@@ -1,2 +1,2 @@
 # spring-boot-hello-world
-Jenkins 
+Jenkins pipeline
