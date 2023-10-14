@@ -33,5 +33,5 @@ RUN apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io t
 
 # Other configurations and plugins can be added here
 
-# Start  Jenkins
+# Start Jenkins
 ENTRYPOINT ["/bin/bash"]
