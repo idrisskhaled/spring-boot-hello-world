@@ -4,6 +4,7 @@ FROM jenkins/jenkins:latest
 # Switch to the root user for installation
 USER root
 
+
 # Update the package manager and install required packages
 RUN apt-get update && apt-get install -y \
     apt-transport-https \
