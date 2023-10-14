@@ -1,30 +1,45 @@
+properties([pipelineTriggers([githubPush()])])
+
+node {
+    git credentialsId: 'github-creds',
+        url: 'https://github.com/idrisskhaled/spring-boot-hello-world', branch: 'master'
+}
+
 pipeline {
     agent any
     environment {
         REPOSITORY_URL = 'https://github.com/idrisskhaled/spring-boot-hello-world'
-        DOCKER_HUB_REPO = 'idrisskhaled96/hello-world'  // Changed variable name
-        IMAGE_TAG = 'latest'  // Corrected variable name
+        DOCKER_HUB_REPO = 'idrisskhaled96/hello-world'
+        IMAGE_TAG = 'latest'
+        PATH = "/opt/sonarqube/bin:${env.PATH}"
+        SONAR_PROJECT_KEY = "spring-boot-hello-world"
     }
 
     stages {
         stage('Clone repository') {
             steps {
                 script {
-                    if (fileExists('spring-boot-hello-world')) {
-                        echo 'Repository already cloned, skipping step !'
-                    } else {
-                        sh "git clone ${env.REPOSITORY_URL}"  // Corrected shell command
+                    checkout([$class: 'GitSCM'])
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    // Run SonarQube analysis
+                    withSonarQubeEnv('SonarQube') {
+                        sh "sonar-scanner -Dsonar.projectKey=${env.SONAR_PROJECT_KEY}"
                     }
+
                 }
             }
         }
         stage('Build Docker Image') {
             steps {
                 script {
-                    dir('spring-boot-hello-world') {
                         // Build the Docker image
                         sh "docker build -t ${env.DOCKER_HUB_REPO}:${env.IMAGE_TAG} ."
-                    }
                 }
             }
         }
@@ -36,7 +51,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
                         withDockerRegistry([url: 'https://index.docker.io/v1/']) {
                             sh "docker logout"
-                            sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+                            sh 'echo $dockerHubPassword | docker login -u $dockerHubUser --password-stdin'
                             sh "docker push ${env.DOCKER_HUB_REPO}:${env.IMAGE_TAG}"
                         }
                     }
