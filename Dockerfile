@@ -31,7 +31,5 @@ RUN apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io t
 # Optionally, configure Docker permissions (you may need to adjust this depending on your use case)
 # RUN usermod -a -G docker jenkins
 
-# Other configurations and plugins can be added here
-
 # Start Jenkins
 ENTRYPOINT ["/bin/bash"]
