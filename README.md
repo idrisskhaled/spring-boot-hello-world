@@ -1,2 +1,4 @@
-# spring-boot-hello-world
-Jenkins pipeline hello world ci
+# Spring-boot CI pipeline
+
+### Project architecture
+![project architecture](./project-architecture.drawio.png)
