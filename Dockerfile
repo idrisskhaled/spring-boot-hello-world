@@ -1,32 +1,23 @@
-# Use the official Jenkins image as the base image
-FROM jenkins/jenkins:latest
+FROM maven:3.8.5-openjdk-11 AS maven_build
 
-# Switch to the root user for installation
-USER root
+COPY pom.xml /tmp/
 
-# Update the package manager and install required packages
-RUN apt-get update && apt-get install -y \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg-agent \
-    software-properties-common
+COPY src /tmp/src/
 
-# Add Docker's official GPG key
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+WORKDIR /tmp/
 
+RUN mvn package
 
-# Add Docker CE repository
-RUN add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"
+#pull base image
 
-# Install Docker CE and tini
-RUN apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io tini
+FROM eclipse-temurin:11
 
-# Optional: Install Docker Compose (uncomment the following lines if needed)
-# USER root
-# RUN curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-# RUN chmod +x /usr/local/bin/docker-compose
-# USER jenkins
+#expose port 8080
+EXPOSE 8080
 
-# Start Jenkins
-ENTRYPOINT ["/bin/bash"]
+#default command
+CMD java -jar /data/hello-world-0.1.0.jar
+
+#copy hello world to docker image from builder image
+
+COPY --from=maven_build /tmp/target/hello-world-0.1.0.jar /data/hello-world-0.1.0.jar
