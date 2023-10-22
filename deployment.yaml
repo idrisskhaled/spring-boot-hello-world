@@ -1,32 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sample-nodejs
+  name: spring-boot-hello-world
   labels:
-    app: sample-nodejs
+    app: spring-boot-hello-world
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: sample-nodejs
+      app: spring-boot-hello-world
   template:
     metadata:
       labels:
-        app: sample-nodejs
+        app: spring-boot-hello-world
     spec:
       containers:
-        - name: node-hello-world
-          image: idrisskhaled96/node-hello-world:latest
+        - name: hello-world
+          image: idrisskhaled96/hello-world:latest
 
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: sample-nodejs-service
+  name: spring-boot-hello-world-service
 spec:
   selector:
-    app: sample-nodejs
+    app: spring-boot-hello-world
   ports:
     - protocol: TCP
       port: 80
