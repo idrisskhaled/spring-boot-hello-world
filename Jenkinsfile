@@ -23,18 +23,19 @@ pipeline {
                 }
             }
         }
-
+            
         stage('SonarQube Analysis') {
             steps {
                 script {
                     // Run SonarQube analysis
                     withSonarQubeEnv('SonarQube') {
-                        sh "sonar-scanner -Dsonar.projectKey=${env.SONAR_PROJECT_KEY}"
+                        sh "mvn -f pom.xml sonar:sonar -Dsonar.exclusions=**/*.java"
                     }
 
                 }
             }
         }
+
         stage('Build Docker Image') {
             steps {
                 script {
@@ -43,6 +44,7 @@ pipeline {
                 }
             }
         }
+        
 
         stage('Push to Docker Hub') {
             steps {
