@@ -1,0 +1,32 @@
+- name: Update Jenkins Role in Kubernetes
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Check if the file exists
+      stat:
+        path: jenkins-role.yaml
+      register: file_stat
+
+    - name: Add new rule to Jenkins Role
+      blockinfile:
+        path: jenkins-role.yaml
+        block: |
+          - apiGroups: ["*"]
+            resources: ["pods", "services", "deployments"]
+            verbs: ["get", "list", "create", "update", "delete"]
+        insertafter: EOF
+      when: file_stat.stat.exists
+
+    - name: File does not contain header, adding it
+      copy:
+        content: |
+          apiVersion: rbac.authorization.k8s.io/v1
+          kind: ClusterRole
+          metadata:
+            name: jenkins-role
+          rules:
+            - apiGroups: ["*"]
+              resources: ["pods", "services", "deployments"]
+              verbs: ["get", "list", "create", "update", "delete"]
+        dest: jenkins-role.yaml
+      when: not file_stat.stat.exists
