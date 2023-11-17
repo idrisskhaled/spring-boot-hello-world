@@ -9,7 +9,7 @@ services:
     depends_on:
       - mongo-db  # Ensure the Spring Boot app starts after the MongoDB service
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://mongo-db:27017/your-database-name
+      SPRING_DATA_MONGODB_URI: mongodb://mongo-db:27017/userDatabase
     networks:
       - my-network
 
