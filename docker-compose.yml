@@ -5,7 +5,7 @@ services:
     image: hello-world:latest
     container_name: hello-world
     ports:
-      - "8080:8080"  # Map the Spring Boot app's port to the host machine
+      - "8081:8080"  # Map the Spring Boot app's port to the host machine
     depends_on:
       - mongo-db  # Ensure the Spring Boot app starts after the MongoDB service
     environment:
