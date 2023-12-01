@@ -42,7 +42,7 @@ resource "azurerm_app_service" "main" {
   app_service_plan_id = azurerm_app_service_plan.main.id
 
   site_config {
-    linux_fx_version = "DOCKER|idrisskhaled96/spring-boot-hello-world:latest"
+    linux_fx_version = "DOCKER|idrisskhaled96/hello-world:latest:latest"
   }
 
   app_settings = {
