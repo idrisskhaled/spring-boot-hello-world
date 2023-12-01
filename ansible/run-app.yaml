@@ -1,5 +1,5 @@
 - name: Run Java Application
-  hosts: your_java_host
+  hosts: my_azure_vm
   gather_facts: true
   tasks:
     - name: Run Java Application
