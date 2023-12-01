@@ -1,11 +1,11 @@
-output "resource_group_name" {
-  value = azurerm_resource_group.rg.name
+variable "location" {
+  description = "The location/region in which to create the resources."
+  type        = string
+  default     = "West Europe"
 }
 
-output "public_ip_address" {
-  value = azurerm_linux_virtual_machine.my_terraform_vm.public_ip_address
-}
-
-output "key_data" {
-  value = jsondecode(azapi_resource_action.ssh_public_key_gen.output).privateKey
+variable "resource_group_name" {
+  description = "The name of the resource group."
+  type        = string
+  default     = "myResourceGroup"
 }
