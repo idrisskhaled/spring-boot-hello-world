@@ -1,11 +1,11 @@
-variable "location" {
-  description = "The location/region in which to create the resources."
-  type        = string
-  default     = "West Europe"
+output "app_service_url" {
+  value = azurerm_app_service.main.default_site_hostname
 }
 
-variable "resource_group_name" {
-  description = "The name of the resource group."
-  type        = string
-  default     = "myResourceGroup"
+output "resource_group_name" {
+  value = azurerm_resource_group.main.name
+}
+
+output "virtual_network_name" {
+  value = azurerm_virtual_network.main.name
 }
