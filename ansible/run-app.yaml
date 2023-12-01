@@ -1,0 +1,8 @@
+- name: Run Java Application
+  hosts: your_java_host
+  gather_facts: true
+  tasks:
+    - name: Run Java Application
+      ansible.builtin.shell:
+        cmd: "java -jar /data/hello-world-0.1.0.jar"
+      become: yes
